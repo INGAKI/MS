@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport content=width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<title>学分认证系统</title>
+	<link rel="stylesheet" type="text/css" href="__CSS__/style.css">
+</head>
+<body>
+	<div id="background">    
+     <img src="__IMAGES__/login_bg.jpg"></div>
+     <div class="head">
+     	<img src="__IMAGES__/logo.png">
+     	<img src="__IMAGES__/logo_line.jpg">
+     	<h1 style="position: fixed;">学分认证系统</h1>
+     </div>
+      <div class="mainbody">
+
+     	<div class="choose">
+     <img id="student" src="__IMAGES__/student_pressed.png" Onclick="change_pic()">
+     <img id="teacher" src="__IMAGES__/teacher_default.png" Onclick="change_teacher()">
+     	</div>
+
+     <form>
+     <div id="wrong_user">
+        <img src="__IMAGES__/wrong_icon.png">
+        <h5>用户格式有误，请修改</h5>
+     </div>
+      <div id="wrong_password">
+        <img src="__IMAGES__/wrong_icon.png">
+        <h5>用户名或密码不正确</h5>
+     </div>
+      <div class="form-group bor">
+       <i id="icon-user"></i>
+       <input type="name" id="username" maxlength="12" onfocus="turn_color(this.id)"></input>
+       </div>
+
+       <div class="form-group bor">
+       <i id="icon-password"></i>
+       <input type="password" id="password" maxlength="12"></input>
+       </div>
+
+       <div class="switch-box is-primary">
+		<input id="primary" class="switch-box-input" type="checkbox" id="checkbox" checked="" />
+		<label for="primary" class="switch-box-slider"></label>
+		<label for="primary" class="switch-box-label"><span>记住账号？</span> </label>
+	</div>
+
+       <button class="button" onClick="return do_login()">登录</button>
+     </form> 
+     </div> 
+     <script type="text/javascript">
+     
+      var is_student=true;
+      var is_teacher=false;
+      function text_clean(id){
+          var targettext=document.getElementById(id).value;
+          targettext.value="";
+      }
+      function check_data(){
+          var username=document.getElementById('username').value;
+          var password=document.getElementById('password').value;
+          var wronguser=document.getElementById('wrong_user');
+          var name_color=document.getElementById('username');
+          var pwd_color=document.getElementById('password');
+          var pattern=/^(\w){3,12}$/; 
+          //第一次检验，检查是否为空
+            if(is_null(username)&&is_null(password)){
+                wrong_user.style.display="block";
+                name_color.style.outlineColor='#b04040';
+                pwd_color.style.outlineColor='#b04040';
+                return false;
+            }
+            else if(is_null(username)){
+                wrong_user.style.display="block";
+                name_color.style.outlineColor='#b04040';
+                username.value="";
+                return false;
+            }
+            else if(is_null(password)){
+                wrong_user.style.display="block";
+                pwd_color.style.outlineColor='#b04040';
+                password.value="";
+                return false;
+            }
+            //检查正则
+            else if((pattern.test(username))==false){
+                wrong_user.style.display="block";
+                name_color.style.outlineColor='#b04040';
+                return false;
+            }
+            return true;
+        }
+        function is_null(str){
+              if (str=="") return true;
+              var regu = "^[ ]+$";
+              var re = new RegExp(regu);
+              return re.test(str);
+        }
+    function turn_color(id){
+      var name_color=document.getElementById('username');
+      var pwd_color=document.getElementById('password');
+      if(!is_null(id.value)&&id=="username"){
+        name_color.style.outlineColor='#99C57A';
+      }
+      else if(!is_null(id.value)&&id=="passoword"){
+        pwd_color.style.outlineColor='#99C57A';
+      }
+    }
+    function do_login(){
+      is_legal=check_data();
+      if(is_legal==false)return is_legal;
+      var form=document.getElementById('form');
+      var is_checked=document.getElementById('primary').checked;
+  }
+    function change_pic(){
+      is_student=true;
+      is_teacher=false;
+      var student=document.getElementById('student');
+      var teacher=document.getElementById('teacher');
+      onOff=true;
+      while(onOff){
+        student.src="__IMAGES__/student_pressed.png";
+        teacher.src="__IMAGES__/teacher_default.png";
+        onOff=false;
+      }
+    };
+    function change_teacher(){
+      is_teacher=true;
+      is_student=false;
+      var student=document.getElementById('student');
+      var teacher=document.getElementById('teacher');
+      inOff=true;
+      while(inOff){
+      teacher.src="__IMAGES__/teacher_pressed.png";
+      student.src="__IMAGES__/student_default.png";
+      inOff=false;
+    }
+  };
+     </script>
+</body>
+</html>
