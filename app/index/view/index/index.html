@@ -32,7 +32,7 @@
      </div>
       <div class="form-group bor">
        <i id="icon-user"></i>
-       <input type="name" id="username" maxlength="12" onfocus="turn_color(this.id)"></input>
+       <input type="name" id="username" maxlength="12" ></input>
        </div>
 
        <div class="form-group bor">
@@ -47,19 +47,18 @@
 	</div>
 
        <button class="button" onClick="return do_login()">登录</button>
+       
      </form> 
      </div> 
      <script type="text/javascript">
-     
       var is_student=true;
       var is_teacher=false;
+      
       function text_clean(id){
           var targettext=document.getElementById(id).value;
           targettext.value="";
       }
-      function check_data(){
-          var username=document.getElementById('username').value;
-          var password=document.getElementById('password').value;
+      function check_data(username,password){
           var wronguser=document.getElementById('wrong_user');
           var name_color=document.getElementById('username');
           var pwd_color=document.getElementById('password');
@@ -97,21 +96,65 @@
               var re = new RegExp(regu);
               return re.test(str);
         }
-    function turn_color(id){
-      var name_color=document.getElementById('username');
-      var pwd_color=document.getElementById('password');
-      if(!is_null(id.value)&&id=="username"){
-        name_color.style.outlineColor='#99C57A';
+          
+      function ajax_login(url,username,password,is_remeber){
+         var xhr;
+         if(window.XMLHttpRequest){
+           xhr=new XMLHttpRequest;
+         }
+         else{
+           xhr=new ActiveXObject("Microsoft.XMLHTTP");
+         }
+         xhr.onreadystatechange=function(){
+            if (xhr.readyState==4 && xhr.status==200){
+               if(xhr.responseText=='"false"'){
+                var name_color=document.getElementById('username');
+                wrong_password.style.display="block";
+                name_color.style.outlineColor='#b04040';
+                return false;
+               }
+               else if(xhr.responseText=='"student"'){
+                window.location.href="{$stumainurl}";
+                return true;
+               }
+               else if(xhr.responseText=="teacher"){
+                window.location.href="{$teachermainurl}";
+                return true;
+               }
+               else{
+                 //系统错误
+                 var name_color=document.getElementById('username');
+                 wrong_password.style.display="block";
+                 name_color.style.outlineColor='#b04040';
+                 return false;
+               }
+            }
+         }
+         xhr.open("POST",url,true);
+         xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+         xhr.send("username="+username+"&password="+password+"&is_remeber="+is_remeber);
       }
-      else if(!is_null(id.value)&&id=="passoword"){
-        pwd_color.style.outlineColor='#99C57A';
-      }
-    }
-    function do_login(){
-      is_legal=check_data();
+      function do_login(){
+      var username=document.getElementById('username').value;
+      var password=document.getElementById('password').value;
+      is_legal=check_data(username,password);
       if(is_legal==false)return is_legal;
-      var form=document.getElementById('form');
-      var is_checked=document.getElementById('primary').checked;
+      var is_remeber=document.getElementById('primary').checked;
+      var result;
+      if(is_teacher==true){
+        var url="{$teacherurl}";
+        result=ajax_login(url,username,password,is_remeber);        
+        if(!result){
+          return result;
+        }
+      }
+      else{
+        var url="{$stuurl}";
+        result=ajax_login(url,username,password,is_remeber);
+        if(!result){
+          return result;
+        }
+      }
   }
     function change_pic(){
       is_student=true;
