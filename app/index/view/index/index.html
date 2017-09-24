@@ -111,6 +111,7 @@
                 var name_color=document.getElementById('username');
                 wrong_password.style.display="block";
                 name_color.style.outlineColor='#b04040';
+                setTimeout("func(){}",2000);
                 return false;
                }
                else if(xhr.responseText=='"student"'){
@@ -121,11 +122,14 @@
                 window.location.href="{$teachermainurl}";
                 return true;
                }
+               else if(xhr.status==0){
+                ajax_login(url,username,password,is_remeber);
+                if(xhr.status!=0)
+                return false;
+               }
                else{
                  //系统错误
-                 var name_color=document.getElementById('username');
-                 wrong_password.style.display="block";
-                 name_color.style.outlineColor='#b04040';
+                 ajax_login(url,username,password,is_remeber);
                  return false;
                }
             }
